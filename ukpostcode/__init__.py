@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .postcode import (
     is_valid,
     format_postcode,

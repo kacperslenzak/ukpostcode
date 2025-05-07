@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 from ukpostcode import (
     is_valid,
