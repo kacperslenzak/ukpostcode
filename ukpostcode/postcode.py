@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import re
-from typing import Optional, Tuple
 
 # UK Postcode validation regex. Does not include special cases.
 POSTCODE_REGEX = re.compile(
@@ -52,7 +51,7 @@ def is_valid(postcode: str) -> bool:
     return bool(POSTCODE_REGEX.match(normalized_postcode))
 
 
-def _validate_and_normalize(postcode: str) -> Tuple[str, bool]:
+def _validate_and_normalize(postcode: str) -> tuple[str, bool]:
     """
     Helper function to validate and normalize a postcode
     """
