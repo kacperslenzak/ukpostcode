@@ -46,10 +46,6 @@ area = get_postcode_area("EC1A 1BB")  # Returns "EC"
 - `get_postcode_area(postcode: str) -> str`: Returns the postcode area (first 1-2 characters)
 - `get_postcode_district(postcode: str) -> str`: Returns the postcode district (characters after area but before inward code)
 
-### Utilities
-
-- `normalize(postcode: str) -> str`: Normalizes a postcode by removing spaces and non-alphanumeric characters and converting to uppercase
-
 ## Tests
 
 To run the supplied tests:
