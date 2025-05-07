@@ -8,6 +8,9 @@ The regex for the initial validation of the postcode format is the following:
 `^((GIR0AA)|((([A-PR-UWYZ][A-HK-Y]?[0-9][0-9]?)|(([A-PR-UWYZ][0-9][A-HJKSTUW])|([A-PR-UWYZ][A-HK-Y][0-9]['
     r'ABEHMNPRV-Y])))[0-9][ABD-HJLNP-UW-Z]{2}))$`
 
+The regex matches the formatting rules found here:
+https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom#Formatting
+
 There is also a further check against a set of special post codes that don't follow the standard format.
 https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom#Special_cases
 
