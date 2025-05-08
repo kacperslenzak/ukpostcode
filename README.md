@@ -44,10 +44,16 @@ area = get_postcode_area("EC1A 1BB")  # Returns "EC"
 
 - `get_inward_code(postcode: str) -> str`: Returns the inward code (last 3 characters)
 - `get_outward_code(postcode: str) -> str`: Returns the outward code (all characters except last 3)
-- `get_postcode_unit(postcode: str) -> str`: Returns the postcode unit (last 2 characters)
-- `get_postcode_sector(postcode: str) -> str`: Returns the postcode sector (3rd character from end)
-- `get_postcode_area(postcode: str) -> str`: Returns the postcode area (first 1-2 characters)
-- `get_postcode_district(postcode: str) -> str`: Returns the postcode district (characters after area but before inward code)
+- `get_postcode_unit(postcode: str) -> str or None`: Returns the postcode unit (last 2 characters)
+- `get_postcode_sector(postcode: str) -> str or None`: Returns the postcode sector (3rd character from end)
+- `get_postcode_area(postcode: str) -> str or None`: Returns the postcode area (first 1-2 characters)
+- `get_postcode_district(postcode: str) -> str or None`: Returns the postcode district (characters after area but before inward code)
+
+## Limitations
+
+The library validates if postcodes match the current specified format of UK postcodes.
+These postcodes change everyday. This library also does not validate if postcodes match a valid address.
+This would have to be crossreferenced with a valid dataset of valid postcodes in the UK.
 
 ## Tests
 
