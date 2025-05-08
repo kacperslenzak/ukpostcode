@@ -17,7 +17,7 @@ https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom#Special_cases
 ## Usage
 
 ```python
-from ukpostcode import is_valid, format_postcode, get_postcode_area
+from ukpostcode import is_valid, format_postcode
 
 # Validate a postcode
 if is_valid("W1A 1AA"):
