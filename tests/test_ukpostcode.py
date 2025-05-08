@@ -75,17 +75,17 @@ class TestUKPostcodeLibrary(unittest.TestCase):
 
     def test_component_extraction_valid(self):
         test_cases = [
-            ('SW1W 0NY', {'area': 'SW', 'district': '1W', 'sector': '0', 'unit': 'NY', 'inward': '0NY', 'outward': 'SW1W'}),
-            ('BF1 0AB', {'area': 'BF', 'district': '1', 'sector': '0', 'unit': 'AB', 'inward': '0AB', 'outward': 'BF1'}),
+            ("SW1W 0NY", {"area": "SW", "district": "1W", "sector": "0", "unit": "NY", "inward": "0NY", "outward": "SW1W"}),
+            ("BF1 0AB", {"area": "BF", "district": "1", "sector": "0", "unit": "AB", "inward": "0AB", "outward": "BF1"}),
         ]
 
         for postcode, expected_output in test_cases:
-            self.assertEqual(get_postcode_area(postcode), expected_output['area'])
-            self.assertEqual(get_postcode_district(postcode), expected_output['district'])
-            self.assertEqual(get_postcode_sector(postcode), expected_output['sector'])
-            self.assertEqual(get_postcode_unit(postcode), expected_output['unit'])
-            self.assertEqual(get_inward_code(postcode), expected_output['inward'])
-            self.assertEqual(get_outward_code(postcode), expected_output['outward'])
+            self.assertEqual(get_postcode_area(postcode), expected_output["area"])
+            self.assertEqual(get_postcode_district(postcode), expected_output["district"])
+            self.assertEqual(get_postcode_sector(postcode), expected_output["sector"])
+            self.assertEqual(get_postcode_unit(postcode), expected_output["unit"])
+            self.assertEqual(get_inward_code(postcode), expected_output["inward"])
+            self.assertEqual(get_outward_code(postcode), expected_output["outward"])
 
 
 if __name__ == "__main__":
