@@ -25,9 +25,6 @@ if is_valid("W1A 1AA"):
 
 # Format a postcode
 formatted = format_postcode("w1a1aa")  # Returns "W1A 1AA"
-
-# Get postcode components
-area = get_postcode_area("EC1A 1BB")  # Returns "EC"
 ```
 
 ## API Reference
