@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+from typing import Optional
 
 # UK Postcode validation regex. Does not include special cases.
 POSTCODE_REGEX = re.compile(
@@ -19,7 +20,7 @@ NUMERIC_OVERSEAS_REGEX = re.compile(r'^(KY[0-9]|MSR|VG|AI)[0-9]{4}$')
 # Using a set for special postcode verification. No need to make the regex any more complex
 SPECIAL_POSTCODE_CASES = frozenset((
     'ASCN1ZZ', 'BBND1ZZ', 'BIQQ1ZZ', 'FIQQ1ZZ', 'GX111AA', 'PCRN1ZZ',
-    'SIQQ1ZZ', 'STHL1ZZ', 'TDCU1ZZ', 'TKCA1ZZ', 'AI2640', 'GIR0AA', 'SANTA1'
+    'SIQQ1ZZ', 'STHL1ZZ', 'TDCU1ZZ', 'TKCA1ZZ', 'GIR0AA', 'SANTA1'
 ))
 
 
@@ -58,10 +59,7 @@ def is_valid(postcode: str) -> bool:
         """
         return True
 
-    if BFPO_REGEX.match(normalized_postcode):
-        return True
-
-    if NUMERIC_OVERSEAS_REGEX.match(normalized_postcode):
+    if BFPO_REGEX.match(normalized_postcode) or NUMERIC_OVERSEAS_REGEX.match(normalized_postcode):
         return True
 
     return bool(POSTCODE_REGEX.match(normalized_postcode))
@@ -85,6 +83,21 @@ def format_postcode(postcode: str) -> str:
     Normalize, validate and format the postcode into standard UK postcode formatting
     """
     normalized_postcode = _validate_and_normalize(postcode)
+
+    # Handle special cases that require custom formatting
+    if normalized_postcode in SPECIAL_POSTCODE_CASES:
+        if normalized_postcode in ('SANTA1', 'GIR0AA'):
+            return f"{normalized_postcode[:3]} {normalized_postcode[3:]}"
+        return f"{normalized_postcode[:-3]} {normalized_postcode[-3:]}"
+
+    # Handle BFPO postcodes
+    if BFPO_REGEX.match(normalized_postcode):
+        return f"BFPO {normalized_postcode[4:]}"
+
+    # Handle numeric overseas postcodes
+    if NUMERIC_OVERSEAS_REGEX.match(normalized_postcode):
+        return f"{normalized_postcode[:-4]}-{normalized_postcode[-4:]}"
+
     return f"{normalized_postcode[:-3]} {normalized_postcode[-3:]}"
 
 
@@ -93,8 +106,6 @@ def get_inward_code(postcode: str) -> str:
     Return the inward code of the postcode
     """
     normalized_postcode = _validate_and_normalize(postcode)
-    if BFPO_REGEX.match(normalized_postcode):
-        raise ValueError("BFPO postcodes have no inward code")
 
     return normalized_postcode[-3:]
 
@@ -110,39 +121,44 @@ def get_outward_code(postcode: str) -> str:
     return normalized_postcode[:-3]
 
 
-def get_postcode_unit(postcode: str) -> str:
+def get_postcode_unit(postcode: str) -> Optional[str]:
     """
     Return postcode unit of a valid postcode
     This consists of the last 2 characters of the inward portion
     """
     normalized_postcode = _validate_and_normalize(postcode)
-    if BFPO_REGEX.match(normalized_postcode):
-        raise ValueError("BFPO postcodes have no postcode unit")
+
+    if BFPO_REGEX.match(normalized_postcode) or NUMERIC_OVERSEAS_REGEX.match(normalized_postcode):
+        """Return none as overseas and BFPO postal codes do not follow the standard format"""
+        return None
 
     return normalized_postcode[-2:]
 
 
-def get_postcode_sector(postcode: str) -> str:
+def get_postcode_sector(postcode: str) -> Optional[str]:
     """
     Return postcode sector of a valid postcode
     This consists of the first character of the inward portion of the postcode
     """
     normalized_postcode = _validate_and_normalize(postcode)
+
+    if BFPO_REGEX.match(normalized_postcode) or NUMERIC_OVERSEAS_REGEX.match(normalized_postcode):
+        """Return none as overseas and BFPO postal codes do not follow the standard format"""
+        return None
+
     return normalized_postcode[-3]
 
 
-def get_postcode_area(postcode: str) -> str:
+def get_postcode_area(postcode: str) -> Optional[str]:
     """
     Return the postcode area of a valid postcode
     This consists of the first 1-2 characters of the outward code.
     """
     normalized_postcode = _validate_and_normalize(postcode)
 
-    if BFPO_REGEX.match(normalized_postcode):
-        return "BFPO"
-
-    if NUMERIC_OVERSEAS_REGEX.match(normalized_postcode):
-        return normalized_postcode[:2] if normalized_postcode.startswith(('KY', 'VG', 'MSR')) else normalized_postcode[:1]
+    if BFPO_REGEX.match(normalized_postcode) or NUMERIC_OVERSEAS_REGEX.match(normalized_postcode):
+        """Return none as overseas and BFPO postal codes do not follow the standard format"""
+        return None
 
     if len(normalized_postcode) >= 2 and normalized_postcode[1].isalpha():
         return normalized_postcode[:2]
@@ -150,15 +166,16 @@ def get_postcode_area(postcode: str) -> str:
     return normalized_postcode[:1]
 
 
-def get_postcode_district(postcode: str) -> str:
+def get_postcode_district(postcode: str) -> Optional[str]:
     """
     Return the postcode district of the postcode
     This is the last 1-3 characters of the outward code of the postcode
     """
     normalized_postcode = _validate_and_normalize(postcode)
 
-    if BFPO_REGEX.match(normalized_postcode):
-        return normalized_postcode[4:]
+    if BFPO_REGEX.match(normalized_postcode) or NUMERIC_OVERSEAS_REGEX.match(normalized_postcode):
+        """Return none as overseas and BFPO postal codes do not follow the standard format"""
+        return None
 
     outward = normalized_postcode[:-3]
     area = get_postcode_area(normalized_postcode)
